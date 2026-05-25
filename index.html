@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -119,6 +120,18 @@
   .testimonial-name{font-size:.84rem;font-weight:500;color:var(--ink)}
   .testimonial-role{font-size:.73rem;color:var(--ink-muted);margin-top:.15rem}
 
+  /* CLIENTS */
+  .clients-section{background:#ffffff;padding:6rem 4rem;border-top:1px solid var(--border)}
+  .clients-headline{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,3vw,3rem);font-weight:300;color:var(--ink);line-height:1.1;margin-bottom:.75rem}
+  .clients-sub{font-size:.92rem;color:var(--ink-muted);font-weight:300;margin-bottom:3.5rem;max-width:560px}
+  .clients-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:0;border:1px solid var(--border)}
+  .client-cell{display:flex;align-items:center;justify-content:center;padding:1.75rem 1.5rem;border-right:1px solid var(--border);border-bottom:1px solid var(--border);min-height:90px;transition:background .3s;background:#fff}
+  .client-cell:hover{background:var(--paper-alt)}
+  .client-cell:nth-child(5n){border-right:none}
+  .client-cell:nth-child(n+16){border-bottom:none}
+  .client-cell img{width:100%;max-width:115px;height:auto;max-height:48px;object-fit:contain;opacity:.5;filter:grayscale(100%);transition:opacity .35s,filter .35s}
+  .client-cell:hover img{opacity:1;filter:grayscale(0%)}
+
   .cta-section{padding:9rem 4rem;text-align:center;position:relative;overflow:hidden}
   .cta-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(30,111,212,.04) 0%,transparent 55%),radial-gradient(ellipse at 70% 50%,rgba(0,200,232,.06) 0%,transparent 55%);z-index:0}
   .cta-grid{position:absolute;inset:0;z-index:0;background-image:linear-gradient(rgba(30,111,212,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(30,111,212,.04) 1px,transparent 1px);background-size:60px 60px}
@@ -179,6 +192,7 @@
     <li><a href="#approach">Approach</a></li>
     <li><a href="#about">About</a></li>
     <li><a href="#team">Team</a></li>
+    <li><a href="#clients">Clients</a></li>
     <li><a href="#contact" class="nav-cta">Engage Us</a></li>
   </ul>
 </nav>
@@ -249,7 +263,7 @@
   <div class="team-grid">
     <div class="team-card reveal">
       <div class="team-photo-wrap">
-        <img src="83853100-12CC-4C98-AED1-FED9972D6A52.PNG" alt="Ajay Lodha" class="team-photo">
+        <img src="ajay-lodha.png" alt="Ajay Lodha" class="team-photo">
         <div class="team-photo-overlay"></div>
       </div>
       <div class="team-info">
@@ -329,6 +343,8 @@
   </div>
 </section>
 
+
+
 <!-- CLIENTS -->
 <section class="clients-section" id="clients">
   <div class="section-label reveal">Clients Served</div>
@@ -362,7 +378,6 @@
 
   </div>
 </section>
-
 
 <section class="cta-section" id="contact">
   <div class="cta-bg"></div>
