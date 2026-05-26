@@ -132,7 +132,36 @@
   .client-cell:hover img{opacity:1;filter:grayscale(0%)}
 
   .cta-section{padding:9rem 4rem;text-align:center;position:relative;overflow:hidden}
-  .calendly-wrap{margin-top:3rem;border:1px solid var(--border);border-radius:4px;overflow:hidden;box-shadow:0 4px 32px rgba(0,60,120,.08);background:#fff;max-width:900px;margin-left:auto;margin-right:auto}
+  .calendly-wrap{
+    margin-top:3rem;border:1px solid var(--border);border-radius:4px;
+    overflow:hidden;box-shadow:0 8px 40px rgba(0,60,120,.1);background:#fff;
+    max-width:900px;margin-left:auto;margin-right:auto;
+    display:none;opacity:0;transform:translateY(20px);
+    transition:opacity .4s ease,transform .4s ease;
+  }
+  .calendly-wrap.visible{display:block}
+  .calendly-wrap.animated{opacity:1;transform:translateY(0)}
+  .calendly-close-bar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:.85rem 1.5rem;background:var(--paper-alt);
+    border-bottom:1px solid var(--border);
+  }
+  .calendly-close-bar span{font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-mid);font-weight:500}
+  .calendly-close-bar button{background:none;border:none;cursor:pointer;font-size:1.1rem;color:var(--ink-muted);line-height:1;padding:.2rem .4rem;transition:color .2s}
+  .calendly-close-bar button:hover{color:var(--ink)}
+  /* Booked confirmation */
+  .calendly-booked{
+    display:none;margin-top:3rem;padding:3rem 2rem;
+    border:1px solid rgba(0,180,100,.2);border-radius:4px;
+    background:rgba(0,200,120,.04);max-width:900px;
+    margin-left:auto;margin-right:auto;text-align:center;
+    animation:fadeUp .5s ease forwards;
+  }
+  .calendly-booked.visible{display:block}
+  .booked-icon{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#1e6fd4,#00b8d4);display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;font-size:1.4rem;color:#fff}
+  .booked-title{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:var(--ink);margin-bottom:.75rem}
+  .booked-sub{font-size:.95rem;color:var(--ink-muted);font-weight:300;line-height:1.7}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
   .cta-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(30,111,212,.04) 0%,transparent 55%),radial-gradient(ellipse at 70% 50%,rgba(0,200,232,.06) 0%,transparent 55%);z-index:0}
   .cta-grid{position:absolute;inset:0;z-index:0;background-image:linear-gradient(rgba(30,111,212,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(30,111,212,.04) 1px,transparent 1px);background-size:60px 60px}
   .cta-content{position:relative;z-index:1;max-width:720px;margin:0 auto}
@@ -269,6 +298,7 @@
     .cta-actions .btn-primary,.cta-actions .btn-ghost{width:100%;max-width:320px;justify-content:center}
     .calendly-wrap{margin-top:2rem}
     .calendly-inline-widget{height:580px!important}
+    .booked-title{font-size:1.6rem}
 
     /* Footer */
     footer{padding:3rem 1.5rem}
@@ -532,15 +562,27 @@
     <h2 class="cta-headline reveal">Ready to move<br>faster with <span class="grad-h">clarity</span>?</h2>
     <p class="cta-sub reveal d1">Whether you're navigating a critical transformation, building AI capability, or need experienced leadership to bridge a strategic gap—we'd like to hear about your challenge.</p>
     <div class="cta-actions reveal d2">
-      <a href="https://calendly.com/ajaylodha" target="_blank" rel="noopener" class="btn-primary">Schedule a Conversation <span class="arrow">→</span></a>
+      <button id="open-calendly" class="btn-primary">Schedule a Conversation <span class="arrow">→</span></button>
       <a href="#services" class="btn-ghost">Explore Services</a>
     </div>
 
-    <!-- Calendly inline widget -->
-    <div class="calendly-wrap reveal d3">
+    <!-- Calendly inline widget — hidden until CTA clicked -->
+    <div class="calendly-wrap" id="calendly-wrap">
+      <div class="calendly-close-bar">
+        <span>Book a meeting with Ajay</span>
+        <button id="close-calendly" aria-label="Close calendar">✕</button>
+      </div>
       <div class="calendly-inline-widget"
+           id="calendly-widget"
            data-url="https://calendly.com/ajaylodha?hide_landing_page_details=1&hide_gdpr_banner=1&background_color=ffffff&text_color=0d1f3c&primary_color=1e6fd4"
            style="min-width:320px;height:700px;"></div>
+    </div>
+
+    <!-- Booking confirmed message -->
+    <div class="calendly-booked" id="calendly-booked">
+      <div class="booked-icon">✓</div>
+      <div class="booked-title">You're booked!</div>
+      <p class="booked-sub">A confirmation has been sent to your email. We look forward to speaking with you.</p>
     </div>
   </div>
 </section>
@@ -618,5 +660,62 @@ for(let i=0;i<90;i++){const p=new Pt();p.life=Math.floor(Math.random()*p.max);pt
 </script>
 <!-- Calendly -->
 <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+<script>
+(function() {
+  const openBtn   = document.getElementById('open-calendly');
+  const closeBtn  = document.getElementById('close-calendly');
+  const wrap      = document.getElementById('calendly-wrap');
+  const booked    = document.getElementById('calendly-booked');
+  let widgetLoaded = false;
+
+  function showWidget() {
+    wrap.classList.add('visible');
+    // Trigger CSS transition on next frame
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => wrap.classList.add('animated'));
+    });
+    wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    openBtn.textContent = 'Change Time';
+    openBtn.classList.remove('btn-primary');
+    openBtn.classList.add('btn-ghost');
+  }
+
+  function hideWidget() {
+    wrap.classList.remove('animated');
+    setTimeout(() => wrap.classList.remove('visible'), 400);
+    openBtn.innerHTML = 'Schedule a Conversation <span class="arrow">→</span>';
+    openBtn.classList.add('btn-primary');
+    openBtn.classList.remove('btn-ghost');
+  }
+
+  openBtn.addEventListener('click', function() {
+    if (wrap.classList.contains('visible')) {
+      hideWidget();
+    } else {
+      showWidget();
+    }
+  });
+
+  closeBtn.addEventListener('click', hideWidget);
+
+  // Listen for Calendly booking completed event
+  window.addEventListener('message', function(e) {
+    if (e.data.event && e.data.event === 'calendly.event_scheduled') {
+      // Hide widget with transition
+      wrap.classList.remove('animated');
+      setTimeout(() => {
+        wrap.classList.remove('visible');
+        // Show booked confirmation
+        booked.classList.add('visible');
+        booked.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Hide the CTA buttons area
+        openBtn.style.display = 'none';
+        document.querySelector('.cta-actions .btn-ghost') &&
+          (document.querySelector('.cta-actions .btn-ghost').style.display = 'none');
+      }, 400);
+    }
+  });
+})();
+</script>
 </body>
 </html>
