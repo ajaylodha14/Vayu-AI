@@ -132,6 +132,7 @@
   .client-cell:hover img{opacity:1;filter:grayscale(0%)}
 
   .cta-section{padding:9rem 4rem;text-align:center;position:relative;overflow:hidden}
+  .calendly-wrap{margin-top:3rem;border:1px solid var(--border);border-radius:4px;overflow:hidden;box-shadow:0 4px 32px rgba(0,60,120,.08);background:#fff;max-width:900px;margin-left:auto;margin-right:auto}
   .cta-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(30,111,212,.04) 0%,transparent 55%),radial-gradient(ellipse at 70% 50%,rgba(0,200,232,.06) 0%,transparent 55%);z-index:0}
   .cta-grid{position:absolute;inset:0;z-index:0;background-image:linear-gradient(rgba(30,111,212,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(30,111,212,.04) 1px,transparent 1px);background-size:60px 60px}
   .cta-content{position:relative;z-index:1;max-width:720px;margin:0 auto}
@@ -266,6 +267,8 @@
     /* CTA */
     .cta-actions{flex-direction:column;align-items:center;gap:1rem}
     .cta-actions .btn-primary,.cta-actions .btn-ghost{width:100%;max-width:320px;justify-content:center}
+    .calendly-wrap{margin-top:2rem}
+    .calendly-inline-widget{height:580px!important}
 
     /* Footer */
     footer{padding:3rem 1.5rem}
@@ -311,7 +314,7 @@
 <nav id="navbar">
   <a href="#" class="nav-logo">
     <picture>
-      <source media="(max-width: 768px)" srcset="vayulogotransparent.png">
+      <source media="(max-width: 768px)" srcset="vayu-logo-nobg.png">
       <img src="vayulogotransparent.png" alt="Vayu.AI">
     </picture>
   </a>
@@ -405,7 +408,7 @@
   <div class="team-grid">
     <div class="team-card reveal">
       <div class="team-photo-wrap">
-        <img src="83853100-12CC-4C98-AED1-FED9972D6A52.PNG" alt="Ajay Lodha" class="team-photo">
+        <img src="ajay-lodha.png" alt="Ajay Lodha" class="team-photo">
         <div class="team-photo-overlay"></div>
       </div>
       <div class="team-info">
@@ -532,7 +535,7 @@
       <a href="https://calendly.com/ajaylodha" target="_blank" rel="noopener" class="btn-primary">Schedule a Conversation <span class="arrow">→</span></a>
       <a href="#services" class="btn-ghost">Explore Services</a>
     </div>
- 
+
     <!-- Calendly inline widget -->
     <div class="calendly-wrap reveal d3">
       <div class="calendly-inline-widget"
@@ -541,7 +544,7 @@
     </div>
   </div>
 </section>
-  
+
 <footer>
   <div class="footer-inner">
     <div>
@@ -613,5 +616,7 @@ class Pt{constructor(){this.reset(true)}reset(init){this.x=Math.random()*W;this.
 for(let i=0;i<90;i++){const p=new Pt();p.life=Math.floor(Math.random()*p.max);pts.push(p)}
 (function frame(){ctx.clearRect(0,0,W,H);for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<110){ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.strokeStyle=`rgba(30,80,180,${.06*(1-d/110)})`;ctx.lineWidth=.5;ctx.stroke()}}pts.forEach(p=>{p.update();p.draw()});requestAnimationFrame(frame)})();
 </script>
+<!-- Calendly -->
+<script src="https://assets.calendly.com/assets/external/widget.js" async></script>
 </body>
 </html>
